@@ -19,8 +19,9 @@ class StockScraper
     doc = Nokogiri::HTML(page)
     stock_nodes = doc.css('[class^="data-row"]')
 
-    stock_nodes.each_with_index do |stock_node|
+    stock_nodes.each_with_index do |stock_node, row_number|
       stock = Stock.new
+      stock.row_number = row_number
 
       NUM_DATA_PIECES_PER_STOCK.times do |index|
         data_node = stock_node.css(".data-col#{index}")

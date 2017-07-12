@@ -6,6 +6,7 @@ class StockChecker::CLI
     print_welcome_message
     fill_stock_list
     display_stock_list
+    binding.pry
   end
 
   def print_welcome_message

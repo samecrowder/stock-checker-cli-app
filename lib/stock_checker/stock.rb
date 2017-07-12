@@ -13,8 +13,10 @@ class Stock
   COL_LOCATION_YEAR_RANGE = 10
   COL_LOCATION_DAY_CHART = 11
 
+  PRICE_DISPLAY_NUM_SPACES_BEFORE = 45
+
   attr_accessor :symbol, :company, :last_price, :market_time, :change, :percent_change, :volume, :avg_volume_3_month,
-          :market_cap, :intraday_high_low, :year_range, :day_chart
+          :market_cap, :intraday_high_low, :year_range, :day_chart, :row_number
 
   # This method is passed a Stock object, the data node holding the next piece of information
   # and the index/column location of the iteration through the current stock and assigns the
@@ -48,6 +50,9 @@ class Stock
   end
 
   def display_key_info
-    puts "#{self.symbol}, #{self.company}, Price: #{self.last_price}, Today's Change: #{self.change}"
+    print "#{self.symbol}," 
+    print "#{self.company}#{" "*(PRICE_DISPLAY_NUM_SPACES_BEFORE - (self.symbol.length + self.company.length))}"
+    print "Price: #{self.last_price}, " 
+    print "Today's Change: #{self.change}"
   end
 end
