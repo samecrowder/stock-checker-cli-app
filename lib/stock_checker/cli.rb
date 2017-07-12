@@ -14,8 +14,9 @@ class StockChecker::CLI
 
     stock_list = StockScraper.new.stock_list
 
-    puts stock_list
-    puts "\n"
+    stock_list.each do |stock|
+      StockScraper.display_key_info(stock)
+    end
   end
 
 end
