@@ -1,5 +1,9 @@
+# This class represents a Stock object and holds information about a stock
+# and methods able to alter or access information from it.
 class Stock
 
+  # THE COL_LOCATION constants are used to determine which stock 
+  # attribute a scraped piece of data applies to.
   COL_LOCATION_SYMBOl = 0
   COL_LOCATION_COMPANY = 1
   COL_LOCATION_LAST_PRICE = 2
@@ -13,13 +17,18 @@ class Stock
   COL_LOCATION_YEAR_RANGE = 10
   COL_LOCATION_DAY_CHART = 11
 
+  # These constant variables allow for uniformity in displaying all
+  # stocks in a table view.
   NUM_SPACES_BEFORE_PRICE_DISPLAY = 45
   NUM_SPACES_BEFORE_CHANGE_DISPLAY = 10
   NUM_SPACES_BEFORE_PERCENT_CHANGE_DISPLAY = 10
 
+  # These constants help to regulate an adjustment made while
+  # displaying company names too long for the table view.
   MAX_COMPANY_LENGTH_FOR_DISPLAY = 35
   NUM_DOTS = 3
 
+  # Store all Stock objects created
   @@all = []
   @@all_yahoo_default = []
 
@@ -36,7 +45,7 @@ class Stock
   attr_accessor :symbol, :company, :last_price, :market_time, :change, :percent_change, :volume, :avg_volume_3_month,
           :market_cap, :intraday_high_low, :year_range, :day_chart, :row_number
 
-  # This method is passed a Stock object, the data node holding the next piece of information
+  # This method is passed a data node holding the next piece of information
   # and the index/column location of the iteration through the current stock and assigns the
   # information from the data node to the corresponding attribute of the Stock object.
   def assign_stock_attribute_from_scraper(data_node, col_location)
@@ -67,6 +76,7 @@ class Stock
     end         
   end
 
+  # Handles the displaying of displaying general information for a stock
   def display_key_info
     if self.change.to_f >= 0
       display_key_info_green
@@ -76,6 +86,7 @@ class Stock
     puts
   end
 
+  # Displays general information for a stock with a positive change today. In green.
   def display_key_info_green
     print "#{self.symbol}, ".green
 
@@ -103,6 +114,7 @@ class Stock
     print "% Change: #{self.percent_change}".green
   end
 
+  # Displays general information for a stock with a negative change today. In red.
   def display_key_info_red
     print "#{self.symbol}, ".red
 
@@ -128,6 +140,7 @@ class Stock
     print "% Change: #{self.percent_change}".red
   end
 
+  # Displays more in depth information about a stock.
   def display_more_info
     puts "Your selected stock:\n".bold
     puts "Stock symbol: #{self.symbol}"
@@ -148,17 +161,20 @@ class Stock
     puts "Market cap: #{self.market_cap}"
   end
 
+  # Resets all @row_number attributes. This method is called after stocks have been sorted and the order has been adjusted.
   def self.reset_row_numbers
     @@all.each_with_index do |stock, index|
       stock.row_number = index + 1
     end 
   end
 
+  # Returns stock list to original sorting, created by Yahoo! Finance.
   def self.sort_by_yahoo_default
     @@all = @@all_yahoo_default
     reset_row_numbers
   end
 
+  # Sorts all stocks alphabetically by symbol
   def self.sort_by_alphabetical
     @@all.sort_by! do |stock|
       stock.symbol
@@ -166,6 +182,7 @@ class Stock
     reset_row_numbers
   end
 
+  # Sorts all stocks by price, highest to lowest
   def self.sort_by_price
     @@all.sort_by! do |stock|
       stock.last_price.to_f
@@ -173,6 +190,7 @@ class Stock
     reset_row_numbers
   end
 
+  # Sorts all stocks by daily change, highest to lowest.
   def self.sort_by_change
     @@all.sort_by! do |stock|
       stock.change.to_f
@@ -180,6 +198,7 @@ class Stock
     reset_row_numbers
   end
 
+  # Sorts all stocks by daily percent change, highest to lowest.
   def self.sort_by_percent_change
     @@all.sort_by! do |stock|
       stock.percent_change.split(/%/)[0].to_f

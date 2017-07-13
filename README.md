@@ -1,6 +1,5 @@
 # StockChecker
 This Ruby CLI app gives the user a short list of today's hottest and coldest stocks on the New York Stock Exchange.
-
 A CLI-driven menu allows you to see more key info. about a stock or sort the entire list of stocks by various simple metrics.
 
 ## Installation
@@ -31,7 +30,7 @@ To install this gem onto your local machine, run `bundle exec rake install`. To 
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/stock_checker.
+Bug reports and pull requests are welcome on GitHub at https://github.com/samecrowder/stock_checker.
 
 ## License
 

@@ -1,15 +1,14 @@
 class StockChecker::CLI
 
+  # This method is called initially by the CLI when the gem is first run. It acts as the Gem controller.
   def call 
     print_welcome_message
-
     scrape_stocks
-
     display_stock_list
-
     menu
   end
 
+  # Display the menu repeatedly and perform actions based on input until the user 'exit's the program.
   def menu
     puts "\nWhat would you like to do?".bold
     puts "Enter the list number of a given stock for more info., 'sort' to sort the list, 
@@ -35,15 +34,18 @@ class StockChecker::CLI
     end
   end
 
+  # Welcomes the user
   def print_welcome_message
     puts "\nWelcome to the Stock Checker!\n".bold.blue
     puts "Loading trending stocks data...\n\n"
   end
 
+  # Uses the StockScraper class to scrape info. from Yahoo! Finance. Stock instances are created in the scraper class
   def scrape_stocks
     StockScraper.scrape_stocks  
   end
 
+  # Prints out the list of all 30 stocks from Yahoo! Finance trending tickers
   def display_stock_list
     puts "Today's trending stocks, powered by Yahoo! Finance:\n\n".bold
     Stock.all.each_with_index do |stock, index|
@@ -52,6 +54,7 @@ class StockChecker::CLI
     end
   end
 
+  # Handles the action of displaying more detail about a given stock
   def handle_detail_display(input)
     if input.to_i < 1 || input.to_i > 30
       puts "Invalid number input. Enter a new command\n"
@@ -60,6 +63,7 @@ class StockChecker::CLI
     end
   end
 
+  # Handles the action of sorting the stocks based on user input.
   def handle_sort
     puts "How would you like to sort your list?".bold
     puts "By 'default', 'alphabetical', 'price', 'change', or 'percent change'?"

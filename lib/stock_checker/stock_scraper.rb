@@ -1,10 +1,15 @@
+# This class is never instantiated, but uses a class method to scrape information
+# about stocks from Yahoo! Finance trending tickers.
 class StockScraper
 
   # As I currently have it, initialize method must return array of Stock objects that have just been scraped
   attr_accessor :stock_list
 
+  # On Yahoo! Finance trending tickers, there are 12 pieces of information about each stock.
   NUM_DATA_PIECES_PER_STOCK = 12
 
+  # Scrapes information from Yahoo! Finance trending tickers and creates new Stock 
+  # objects with the information.
   def self.scrape_stocks
     stock_list = []
 
@@ -27,7 +32,6 @@ class StockScraper
       end
       stock_list << stock
     end
-    stock_list
   end
 
 end
