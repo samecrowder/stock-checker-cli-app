@@ -17,6 +17,9 @@ class Stock
   NUM_SPACES_BEFORE_CHANGE_DISPLAY = 10
   NUM_SPACES_BEFORE_PERCENT_CHANGE_DISPLAY = 10
 
+  MAX_COMPANY_LENGTH_FOR_DISPLAY = 35
+  NUM_DOTS = 3
+
   @@all = []
   @@all_yahoo_default = []
 
@@ -66,40 +69,63 @@ class Stock
 
   def display_key_info
     if self.change.to_f >= 0
-      print "#{self.symbol}, ".green
+      display_key_info_green
+    else
+      display_key_info_red
+    end   
+    puts
+  end
+
+  def display_key_info_green
+    print "#{self.symbol}, ".green
+
+    # If the company name is too long, print out most of it, then print out 3 dots. Else, print normally
+    if self.company.length > MAX_COMPANY_LENGTH_FOR_DISPLAY
+      print "#{self.company[0,MAX_COMPANY_LENGTH_FOR_DISPLAY]}#{'.' * NUM_DOTS}".green
+      print "#{" "*(NUM_SPACES_BEFORE_PRICE_DISPLAY - (self.symbol.length + MAX_COMPANY_LENGTH_FOR_DISPLAY + NUM_DOTS))}"
+      #binding.pry
+    else
       print "#{self.company}".green
       print "#{" "*(NUM_SPACES_BEFORE_PRICE_DISPLAY - (self.symbol.length + self.company.length))}"
+      #binding.pry
+    end
 
-      # Makes sure that single vs. double digit index numbers don't misalign other columns
-      if self.row_number.to_s.size == 1
-        print " "
-      end
+    # Makes sure that single vs. double digit index numbers don't misalign other columns
+    if self.row_number.to_s.size == 1
+      print " "
+    end
 
-      print "Price: #{self.last_price}".green
-      print "#{" "*(NUM_SPACES_BEFORE_CHANGE_DISPLAY - self.last_price.length)}".green
+    print "Price: #{self.last_price}".green
+    print "#{" "*(NUM_SPACES_BEFORE_CHANGE_DISPLAY - self.last_price.length)}".green
 
-      print "Change: #{self.change}".green
-      print "#{" "*(NUM_SPACES_BEFORE_PERCENT_CHANGE_DISPLAY - self.change.length)}"
-      print "% Change: #{self.percent_change}".green
+    print "Change: #{self.change}".green
+    print "#{" "*(NUM_SPACES_BEFORE_PERCENT_CHANGE_DISPLAY - self.change.length)}"
+    print "% Change: #{self.percent_change}".green
+  end
+
+  def display_key_info_red
+    print "#{self.symbol}, ".red
+
+    # If the company name is too long, print out most of it, then print out 3 dots. Else, print normally
+    if self.company.length > MAX_COMPANY_LENGTH_FOR_DISPLAY
+      print "#{self.company[0,MAX_COMPANY_LENGTH_FOR_DISPLAY]}#{'.' * NUM_DOTS}".red
+      print "#{" "*(NUM_SPACES_BEFORE_PRICE_DISPLAY - (self.symbol.length + MAX_COMPANY_LENGTH_FOR_DISPLAY + NUM_DOTS))}"
     else
-      print "#{self.symbol}, ".red
       print "#{self.company}".red
       print "#{" "*(NUM_SPACES_BEFORE_PRICE_DISPLAY - (self.symbol.length + self.company.length))}"
-
-      # Makes sure that single vs. double digit index numbers don't misalign other columns
-      if self.row_number.to_s.size == 1
-        print " "
-      end
-
-      print "Price: #{self.last_price}".red
-      print "#{" "*(NUM_SPACES_BEFORE_CHANGE_DISPLAY - self.last_price.length)}".red
-
-      print "Change: #{self.change}".red
-      print "#{" "*(NUM_SPACES_BEFORE_PERCENT_CHANGE_DISPLAY - self.change.length)}"
-      print "% Change: #{self.percent_change}".red
     end
-    
-    puts
+
+    # Makes sure that single vs. double digit index numbers don't misalign other columns
+    if self.row_number.to_s.size == 1
+      print " "
+    end
+
+    print "Price: #{self.last_price}".red
+    print "#{" "*(NUM_SPACES_BEFORE_CHANGE_DISPLAY - self.last_price.length)}".red
+
+    print "Change: #{self.change}".red
+    print "#{" "*(NUM_SPACES_BEFORE_PERCENT_CHANGE_DISPLAY - self.change.length)}"
+    print "% Change: #{self.percent_change}".red
   end
 
   def display_more_info
@@ -142,7 +168,7 @@ class Stock
 
   def self.sort_by_price
     @@all.sort_by! do |stock|
-      stock.last_price.to_i
+      stock.last_price.to_f
     end.reverse!
     reset_row_numbers
   end
