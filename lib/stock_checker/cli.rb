@@ -13,8 +13,10 @@ class StockChecker::CLI
   def menu
     puts "\nWhat would you like to do?"
     puts "Enter the list number of a given stock for more info., 'sort' to sort the list, and 'exit to leave end the program."
+    puts
 
     input = gets.strip
+    puts
 
     while input != "exit"
       if input.to_i.to_s == input # Checks if the input is an integer
@@ -23,6 +25,7 @@ class StockChecker::CLI
         puts "SORTING LIST"
       end
       input = gets.strip
+      puts
     end
   end
 
@@ -35,7 +38,7 @@ class StockChecker::CLI
   end
 
   def display_stock_list
-    puts "Today's trending stocks, powered by Yahoo! Finance:\n\n"
+    puts "Today's trending stocks, powered by Yahoo! Finance:\n\n".bold
     @stock_list.each_with_index do |stock, index|
       print "#{index + 1}. "
       stock.display_key_info

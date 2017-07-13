@@ -3,6 +3,8 @@ require_relative "./stock_checker/cli"
 require_relative "./stock_checker/stock_scraper"
 require_relative "./stock_checker/stock"
 
+require_relative "../colored/lib/colored"
+
 require "nokogiri"
 require "open-uri"
 
