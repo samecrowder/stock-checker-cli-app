@@ -1,30 +1,34 @@
 class StockChecker::CLI
 
   def call 
-    @stock_list = []
-
     print_welcome_message
-    fill_stock_list
+
+    scrape_stocks
+
     display_stock_list
 
     menu
   end
 
   def menu
-    puts "\nWhat would you like to do?"
-    puts "Enter the list number of a given stock for more info., 'sort' to sort the list, and 'exit to leave end the program."
-    puts
+    puts "\nWhat would you like to do?".bold
+    puts "Enter the list number of a given stock for more info., 'sort' to sort the list, 
+          'display' to display the current list and 'exit to leave end the program.\n"
 
     input = gets.strip
     puts
 
     while input != "exit"
       if input.to_i.to_s == input # Checks if the input is an integer
-        handle_detail_display
+        handle_detail_display(input)
+      elsif input == "display"
+        display_stock_list
       elsif input == "sort"
-        puts "SORTING LIST"
+        handle_sort
+      else
+        puts "Invalid input. Try again.\n".bold
       end
-      puts "\nWhat would you like to do?"
+      puts "\nWhat would you like to do?".bold
       puts "Enter the list number of a given stock for more info., 'sort' to sort the list, and 'exit to leave end the program."
       input = gets.strip
       puts
@@ -32,16 +36,17 @@ class StockChecker::CLI
   end
 
   def print_welcome_message
-    puts "\nWelcome to the Stock Checker!\n\n"
+    puts "\nWelcome to the Stock Checker!\n".bold.blue
+    puts "Loading trending stocks data...\n\n"
   end
 
-  def fill_stock_list
-    @stock_list = StockScraper.scrape_stocks  
+  def scrape_stocks
+    StockScraper.scrape_stocks  
   end
 
   def display_stock_list
     puts "Today's trending stocks, powered by Yahoo! Finance:\n\n".bold
-    @stock_list.each_with_index do |stock, index|
+    Stock.all.each_with_index do |stock, index|
       print "#{index + 1}. "
       stock.display_key_info
     end
@@ -51,7 +56,33 @@ class StockChecker::CLI
     if input.to_i < 1 || input.to_i > 30
       puts "Invalid number input. Enter a new command\n"
     else
-      @stock_list[input.to_i - 1].display_more_info
+      Stock.all[input.to_i - 1].display_more_info
+    end
+  end
+
+  def handle_sort
+    puts "How would you like to sort your list?".bold
+    puts "By 'default', 'alphabetical', 'price', 'change', or 'percent change'?"
+    input = gets.strip
+    puts
+
+    if input =="default"
+      Stock.sort_by_yahoo_default
+      display_stock_list
+    elsif input == "alphabetical"
+      Stock.sort_by_alphabetical
+      display_stock_list
+    elsif input == "price"
+      Stock.sort_by_price
+      display_stock_list
+    elsif input == "change"
+      Stock.sort_by_change
+      display_stock_list
+    elsif input == "percent change"
+      Stock.sort_by_percent_change
+      display_stock_list
+    else
+      puts "Invalid sort option. Returning to main menu.\n".bold
     end
   end
 

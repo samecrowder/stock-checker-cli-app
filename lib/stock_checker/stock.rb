@@ -17,6 +17,18 @@ class Stock
   NUM_SPACES_BEFORE_CHANGE_DISPLAY = 10
   NUM_SPACES_BEFORE_PERCENT_CHANGE_DISPLAY = 10
 
+  @@all = []
+  @@all_yahoo_default = []
+
+  def initialize
+    @@all << self
+    @@all_yahoo_default << self
+  end
+
+  def self.all
+    @@all
+  end
+
 
   attr_accessor :symbol, :company, :last_price, :market_time, :change, :percent_change, :volume, :avg_volume_3_month,
           :market_cap, :intraday_high_low, :year_range, :day_chart, :row_number
@@ -53,23 +65,40 @@ class Stock
   end
 
   def display_key_info
-    print "#{self.symbol}, " 
-    print "#{self.company}"
-    print "#{" "*(NUM_SPACES_BEFORE_PRICE_DISPLAY - (self.symbol.length + self.company.length))}"
+    if self.change.to_f >= 0
+      print "#{self.symbol}, ".green
+      print "#{self.company}".green
+      print "#{" "*(NUM_SPACES_BEFORE_PRICE_DISPLAY - (self.symbol.length + self.company.length))}"
 
-    # Makes sure that single vs. double digit index numbers don't misalign other columns
-    if self.row_number.to_s.size == 1
-      print " "
+      # Makes sure that single vs. double digit index numbers don't misalign other columns
+      if self.row_number.to_s.size == 1
+        print " "
+      end
+
+      print "Price: #{self.last_price}".green
+      print "#{" "*(NUM_SPACES_BEFORE_CHANGE_DISPLAY - self.last_price.length)}".green
+
+      print "Change: #{self.change}".green
+      print "#{" "*(NUM_SPACES_BEFORE_PERCENT_CHANGE_DISPLAY - self.change.length)}"
+      print "% Change: #{self.percent_change}".green
+    else
+      print "#{self.symbol}, ".red
+      print "#{self.company}".red
+      print "#{" "*(NUM_SPACES_BEFORE_PRICE_DISPLAY - (self.symbol.length + self.company.length))}"
+
+      # Makes sure that single vs. double digit index numbers don't misalign other columns
+      if self.row_number.to_s.size == 1
+        print " "
+      end
+
+      print "Price: #{self.last_price}".red
+      print "#{" "*(NUM_SPACES_BEFORE_CHANGE_DISPLAY - self.last_price.length)}".red
+
+      print "Change: #{self.change}".red
+      print "#{" "*(NUM_SPACES_BEFORE_PERCENT_CHANGE_DISPLAY - self.change.length)}"
+      print "% Change: #{self.percent_change}".red
     end
-
-    print "Price: #{self.last_price}" 
-    print "#{" "*(NUM_SPACES_BEFORE_CHANGE_DISPLAY - self.last_price.length)}"
-
-    print "Change: #{self.change}"
-    print "#{" "*(NUM_SPACES_BEFORE_PERCENT_CHANGE_DISPLAY - self.change.length)}"
-
-    print "% Change: #{self.percent_change}"
-
+    
     puts
   end
 
@@ -79,10 +108,56 @@ class Stock
     puts "Company name: #{self.company}"
     puts "Last price: #{self.last_price}"
     puts "Market Time: #{self.market_time}"
-    puts "Daily change: #{self.change}"
-    puts "Daily percent change: #{self.percent_change}"
+
+    if self.change.to_f >= 0
+      puts "Daily change: #{self.change}".green
+      puts "Daily percent change: #{self.percent_change}".green
+    else
+      puts "Daily change: #{self.change}".red
+      puts "Daily percent change: #{self.percent_change}".red
+    end
+
     puts "Volume: #{self.volume}"
     puts "Avg. 3 month volume: #{self.avg_volume_3_month}"
     puts "Market cap: #{self.market_cap}"
+  end
+
+  def self.reset_row_numbers
+    @@all.each_with_index do |stock, index|
+      stock.row_number = index + 1
+    end 
+  end
+
+  def self.sort_by_yahoo_default
+    @@all = @@all_yahoo_default
+    reset_row_numbers
+  end
+
+  def self.sort_by_alphabetical
+    @@all.sort_by! do |stock|
+      stock.symbol
+    end
+    reset_row_numbers
+  end
+
+  def self.sort_by_price
+    @@all.sort_by! do |stock|
+      stock.last_price.to_i
+    end.reverse!
+    reset_row_numbers
+  end
+
+  def self.sort_by_change
+    @@all.sort_by! do |stock|
+      stock.change.to_f
+    end.reverse!
+    reset_row_numbers
+  end
+
+  def self.sort_by_percent_change
+    @@all.sort_by! do |stock|
+      stock.percent_change.split(/%/)[0].to_f
+    end.reverse!
+    reset_row_numbers
   end
 end
