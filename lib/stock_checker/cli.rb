@@ -20,10 +20,12 @@ class StockChecker::CLI
 
     while input != "exit"
       if input.to_i.to_s == input # Checks if the input is an integer
-        @stock_list[input.to_i - 1].display_more_info
+        handle_detail_display
       elsif input == "sort"
         puts "SORTING LIST"
       end
+      puts "\nWhat would you like to do?"
+      puts "Enter the list number of a given stock for more info., 'sort' to sort the list, and 'exit to leave end the program."
       input = gets.strip
       puts
     end
@@ -42,6 +44,14 @@ class StockChecker::CLI
     @stock_list.each_with_index do |stock, index|
       print "#{index + 1}. "
       stock.display_key_info
+    end
+  end
+
+  def handle_detail_display(input)
+    if input.to_i < 1 || input.to_i > 30
+      puts "Invalid number input. Enter a new command\n"
+    else
+      @stock_list[input.to_i - 1].display_more_info
     end
   end
 

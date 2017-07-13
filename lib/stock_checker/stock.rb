@@ -80,5 +80,9 @@ class Stock
     puts "Last price: #{self.last_price}"
     puts "Market Time: #{self.market_time}"
     puts "Daily change: #{self.change}"
+    puts "Daily percent change: #{self.percent_change}"
+    puts "Volume: #{self.volume}"
+    puts "Avg. 3 month volume: #{self.avg_volume_3_month}"
+    puts "Market cap: #{self.market_cap}"
   end
 end
