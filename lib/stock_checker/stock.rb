@@ -72,4 +72,14 @@ class Stock
 
     puts
   end
+
+  def display_more_info
+    puts "Your selected stock: "
+    puts "Stock symbol: #{self.symbol}"
+    puts "Company name: #{self.company}"
+    puts "Last price: #{self.last_price}"
+    puts "Market Time: #{self.market_time}"
+    puts "Daily change: #{self.change}"
+
+  end
 end

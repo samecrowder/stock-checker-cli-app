@@ -18,7 +18,7 @@ class StockChecker::CLI
 
     while input != "exit"
       if input.to_i.to_s == input # Checks if the input is an integer
-        puts "DISPLAYIN MORE INFO"
+        @stock_list[input.to_i - 1].display_more_info
       elsif input == "sort"
         puts "SORTING LIST"
       end
