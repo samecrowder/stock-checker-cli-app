@@ -13,7 +13,10 @@ class Stock
   COL_LOCATION_YEAR_RANGE = 10
   COL_LOCATION_DAY_CHART = 11
 
-  PRICE_DISPLAY_NUM_SPACES_BEFORE = 45
+  NUM_SPACES_BEFORE_PRICE_DISPLAY = 45
+  NUM_SPACES_BEFORE_CHANGE_DISPLAY = 10
+  NUM_SPACES_BEFORE_PERCENT_CHANGE_DISPLAY = 10
+
 
   attr_accessor :symbol, :company, :last_price, :market_time, :change, :percent_change, :volume, :avg_volume_3_month,
           :market_cap, :intraday_high_low, :year_range, :day_chart, :row_number
@@ -50,9 +53,23 @@ class Stock
   end
 
   def display_key_info
-    print "#{self.symbol}," 
-    print "#{self.company}#{" "*(PRICE_DISPLAY_NUM_SPACES_BEFORE - (self.symbol.length + self.company.length))}"
-    print "Price: #{self.last_price}, " 
-    print "Today's Change: #{self.change}"
+    print "#{self.symbol}, " 
+    print "#{self.company}"
+    print "#{" "*(NUM_SPACES_BEFORE_PRICE_DISPLAY - (self.symbol.length + self.company.length))}"
+
+    # Makes sure that single vs. double digit index numbers don't misalign other columns
+    if self.row_number.to_s.size == 1
+      print " "
+    end
+
+    print "Price: #{self.last_price}" 
+    print "#{" "*(NUM_SPACES_BEFORE_CHANGE_DISPLAY - self.last_price.length)}"
+
+    print "Change: #{self.change}"
+    print "#{" "*(NUM_SPACES_BEFORE_PERCENT_CHANGE_DISPLAY - self.change.length)}"
+
+    print "% Change: #{self.percent_change}"
+
+    puts
   end
 end
