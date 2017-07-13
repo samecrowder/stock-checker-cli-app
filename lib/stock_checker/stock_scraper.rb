@@ -9,7 +9,7 @@ class StockScraper
   NUM_DATA_PIECES_PER_STOCK = 12
 
   # Scrapes information from Yahoo! Finance trending tickers and creates new Stock 
-  # objects with the information.
+  # objects with the information
   def self.scrape_stocks
     stock_list = []
 
